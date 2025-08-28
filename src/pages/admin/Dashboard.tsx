@@ -148,7 +148,7 @@ const AdminDashboard: React.FC = () => {
     <div className="min-h-screen bg-dark-bg text-white pt-16">
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-orbitron font-bold mb-2 glow-text">
+          <h1 className="text-4xl font-orbitron font-bold mb-2 text-white">
             Admin Dashboard
           </h1>
           <p className="text-light-gray">
@@ -179,8 +179,8 @@ const AdminDashboard: React.FC = () => {
         {/* Recent Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Recent Registrations */}
-          <div className="neon-border rounded-lg p-6 glass-effect">
-            <h2 className="text-2xl font-orbitron font-bold mb-6 text-neon-blue">
+          <div className="game-card rounded-lg p-6">
+            <h2 className="text-2xl font-orbitron font-bold mb-6 text-white">
               Recent Registrations
             </h2>
             
@@ -215,8 +215,8 @@ const AdminDashboard: React.FC = () => {
           </div>
 
           {/* Quick Actions */}
-          <div className="neon-border rounded-lg p-6 glass-effect">
-            <h2 className="text-2xl font-orbitron font-bold mb-6 text-neon-purple">
+          <div className="game-card rounded-lg p-6">
+            <h2 className="text-2xl font-orbitron font-bold mb-6 text-white">
               Quick Actions
             </h2>
             

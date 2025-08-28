@@ -155,7 +155,7 @@ const Register: React.FC = () => {
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-orbitron font-bold mb-4 glow-text">
+            <h1 className="text-4xl font-orbitron font-bold mb-4 text-white">
               Tournament Registration
             </h1>
             <p className="text-light-gray">
@@ -187,7 +187,7 @@ const Register: React.FC = () => {
           </div>
 
           {step === 1 && (
-            <form onSubmit={(e) => { e.preventDefault(); setStep(2); }} className="neon-border rounded-lg p-8 glass-effect">
+            <form onSubmit={(e) => { e.preventDefault(); setStep(2); }} className="game-card rounded-lg p-8">
               <h2 className="text-2xl font-orbitron font-bold mb-6 text-center">Player Information</h2>
               
               <div className="space-y-6">
@@ -276,7 +276,7 @@ const Register: React.FC = () => {
           )}
 
           {step === 2 && selectedTournament && (
-            <div className="neon-border rounded-lg p-8 glass-effect">
+            <div className="game-card rounded-lg p-8">
               <h2 className="text-2xl font-orbitron font-bold mb-6 text-center">Payment Confirmation</h2>
               
               {selectedTournament.qrCodeUrl ? (

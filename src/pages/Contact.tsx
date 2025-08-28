@@ -45,7 +45,7 @@ const Contact: React.FC = () => {
       <section className="py-16 bg-dark-gradient">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h1 className="text-5xl font-orbitron font-black mb-4 glow-text">
+            <h1 className="text-5xl font-orbitron font-black mb-4 text-white">
               Contact Us
             </h1>
             <p className="text-xl text-light-gray max-w-2xl mx-auto">
@@ -61,7 +61,7 @@ const Contact: React.FC = () => {
             {/* Contact Information */}
             <div className="space-y-8">
               <div>
-                <h2 className="text-3xl font-orbitron font-bold mb-6 glow-text">
+                <h2 className="text-3xl font-orbitron font-bold mb-6 text-white">
                   Get In Touch
                 </h2>
                 <p className="text-light-gray text-lg mb-8">
@@ -72,13 +72,13 @@ const Contact: React.FC = () => {
 
               {/* Contact Cards */}
               <div className="space-y-6">
-                <div className="neon-border rounded-lg p-6 glass-effect hover:shadow-lg hover:shadow-neon-blue/20 transition-all duration-300">
+                <div className="game-card rounded-lg p-6 hover:transform hover:scale-105 transition-all duration-300">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-neon-gradient rounded-full flex items-center justify-center">
-                      <Mail className="w-6 h-6 text-dark-bg" />
+                    <div className="w-12 h-12 bg-neon-blue rounded-full flex items-center justify-center">
+                      <Mail className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-orbitron font-bold text-neon-blue">
+                      <h3 className="text-lg font-orbitron font-bold text-white">
                         Email Support
                       </h3>
                       <p className="text-light-gray">support@reprixesports.com</p>
@@ -87,13 +87,13 @@ const Contact: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="neon-border rounded-lg p-6 glass-effect hover:shadow-lg hover:shadow-neon-blue/20 transition-all duration-300">
+                <div className="game-card rounded-lg p-6 hover:transform hover:scale-105 transition-all duration-300">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-neon-gradient rounded-full flex items-center justify-center">
-                      <Phone className="w-6 h-6 text-dark-bg" />
+                    <div className="w-12 h-12 bg-neon-blue rounded-full flex items-center justify-center">
+                      <Phone className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-orbitron font-bold text-neon-blue">
+                      <h3 className="text-lg font-orbitron font-bold text-white">
                         Phone Support
                       </h3>
                       <p className="text-light-gray">+91 98765 43210</p>
@@ -102,13 +102,13 @@ const Contact: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="neon-border rounded-lg p-6 glass-effect hover:shadow-lg hover:shadow-neon-blue/20 transition-all duration-300">
+                <div className="game-card rounded-lg p-6 hover:transform hover:scale-105 transition-all duration-300">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-neon-gradient rounded-full flex items-center justify-center">
-                      <MapPin className="w-6 h-6 text-dark-bg" />
+                    <div className="w-12 h-12 bg-neon-blue rounded-full flex items-center justify-center">
+                      <MapPin className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-orbitron font-bold text-neon-blue">
+                      <h3 className="text-lg font-orbitron font-bold text-white">
                         Office Location
                       </h3>
                       <p className="text-light-gray">Mumbai, Maharashtra</p>
@@ -120,7 +120,7 @@ const Contact: React.FC = () => {
 
               {/* Social Links */}
               <div>
-                <h3 className="text-xl font-orbitron font-bold mb-4 text-neon-purple">
+                <h3 className="text-xl font-orbitron font-bold mb-4 text-white">
                   Follow Us
                 </h3>
                 <div className="flex space-x-4">
@@ -137,7 +137,7 @@ const Contact: React.FC = () => {
             </div>
 
             {/* Contact Form */}
-            <div className="neon-border rounded-lg p-8 glass-effect">
+            <div className="game-card rounded-lg p-8">
               <h2 className="text-2xl font-orbitron font-bold mb-6 text-center">
                 Send us a Message
               </h2>
@@ -207,7 +207,7 @@ const Contact: React.FC = () => {
 
               <div className="mt-6 p-4 bg-neon-blue/10 border border-neon-blue/30 rounded-lg">
                 <p className="text-sm text-light-gray text-center">
-                  <span className="text-neon-blue font-medium">Quick Response:</span> 
+                  <span className="text-white font-medium">Quick Response:</span> 
                   We typically respond to all inquiries within 24 hours during business days.
                 </p>
               </div>

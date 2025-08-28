@@ -64,10 +64,10 @@ const AdminLogin: React.FC = () => {
     <div className="min-h-screen bg-dark-bg text-white flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 mx-auto mb-4 bg-neon-gradient rounded-full flex items-center justify-center">
-            <Shield className="w-8 h-8 text-dark-bg" />
+          <div className="w-16 h-16 mx-auto mb-4 bg-neon-blue rounded-full flex items-center justify-center">
+            <Shield className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-orbitron font-bold mb-2 glow-text">
+          <h1 className="text-3xl font-orbitron font-bold mb-2 text-white">
             Admin Portal
           </h1>
           <p className="text-light-gray">
@@ -75,7 +75,7 @@ const AdminLogin: React.FC = () => {
           </p>
         </div>
 
-        <div className="neon-border rounded-lg p-8 glass-effect">
+        <div className="game-card rounded-lg p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium mb-2">
