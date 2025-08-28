@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { Trophy, Users, Calendar, Clock, Star } from 'lucide-react';
+import { Trophy, Users, Calendar, Clock, Star, Play, ArrowRight } from 'lucide-react';
 
 interface Game {
   id: string;
@@ -9,6 +10,8 @@ interface Game {
   description: string;
   image: string;
   category: string;
+  players: string;
+  tournaments: string;
 }
 
 interface Tournament {
@@ -20,6 +23,7 @@ interface Tournament {
   status: string;
   maxPlayers: number;
   registeredPlayers: number;
+  entryFee: string;
 }
 
 const Games: React.FC = () => {
@@ -27,54 +31,67 @@ const Games: React.FC = () => {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedGame, setSelectedGame] = useState<string>('all');
+  const navigate = useNavigate();
 
-  // Default games data
+  // Enhanced games data with more details
   const defaultGames = [
     {
       id: 'bgmi',
       name: 'BGMI',
-      description: 'Battlegrounds Mobile India - The ultimate battle royale experience',
+      description: 'Battlegrounds Mobile India - The ultimate battle royale experience with 100 players fighting for survival',
       image: 'https://images.pexels.com/photos/7915437/pexels-photo-7915437.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
-      category: 'Battle Royale'
+      category: 'Battle Royale',
+      players: '2.5M+',
+      tournaments: '15 Active'
     },
     {
       id: 'pubg',
       name: 'PUBG Mobile',
-      description: 'PlayerUnknown\'s Battlegrounds - Survive and be the last one standing',
+      description: 'PlayerUnknown\'s Battlegrounds - Survive and be the last one standing in this intense battle royale',
       image: 'https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
-      category: 'Battle Royale'
+      category: 'Battle Royale',
+      players: '3.2M+',
+      tournaments: '12 Active'
     },
     {
       id: 'freefire',
       name: 'Free Fire',
-      description: 'Fast-paced battle royale game with unique characters and abilities',
+      description: 'Fast-paced 10-minute battle royale game with unique characters and special abilities',
       image: 'https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
-      category: 'Battle Royale'
+      category: 'Battle Royale',
+      players: '1.8M+',
+      tournaments: '8 Active'
     },
     {
       id: 'valorant',
       name: 'Valorant',
-      description: 'Tactical first-person shooter with unique agent abilities',
+      description: 'Tactical 5v5 first-person shooter with unique agent abilities and strategic gameplay',
       image: 'https://images.pexels.com/photos/3945313/pexels-photo-3945313.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
-      category: 'FPS'
-    },
-    {
-      id: 'minecraft',
-      name: 'Minecraft',
-      description: 'Creative building and survival game with endless possibilities',
-      image: 'https://images.pexels.com/photos/1029604/pexels-photo-1029604.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
-      category: 'Sandbox'
+      category: 'FPS',
+      players: '1.2M+',
+      tournaments: '6 Active'
     },
     {
       id: 'codm',
       name: 'Call of Duty Mobile',
-      description: 'Action-packed mobile FPS with multiple game modes',
+      description: 'Action-packed mobile FPS with multiple game modes including Battle Royale and Multiplayer',
       image: 'https://images.pexels.com/photos/3945313/pexels-photo-3945313.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
-      category: 'FPS'
+      category: 'FPS',
+      players: '900K+',
+      tournaments: '5 Active'
+    },
+    {
+      id: 'minecraft',
+      name: 'Minecraft',
+      description: 'Creative building and survival game with endless possibilities and competitive building contests',
+      image: 'https://images.pexels.com/photos/1029604/pexels-photo-1029604.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
+      category: 'Sandbox',
+      players: '500K+',
+      tournaments: '3 Active'
     }
   ];
 
-  // Default tournaments data
+  // Enhanced tournaments data
   const defaultTournaments = [
     {
       id: 'bgmi-championship',
@@ -84,7 +101,8 @@ const Games: React.FC = () => {
       prize: '₹5,00,000',
       status: 'upcoming',
       maxPlayers: 100,
-      registeredPlayers: 67
+      registeredPlayers: 67,
+      entryFee: '₹500'
     },
     {
       id: 'pubg-pro-league',
@@ -94,7 +112,8 @@ const Games: React.FC = () => {
       prize: '₹3,00,000',
       status: 'upcoming',
       maxPlayers: 80,
-      registeredPlayers: 45
+      registeredPlayers: 45,
+      entryFee: '₹300'
     },
     {
       id: 'freefire-masters',
@@ -104,7 +123,8 @@ const Games: React.FC = () => {
       prize: '₹2,00,000',
       status: 'upcoming',
       maxPlayers: 60,
-      registeredPlayers: 38
+      registeredPlayers: 38,
+      entryFee: '₹200'
     },
     {
       id: 'valorant-invitational',
@@ -114,7 +134,8 @@ const Games: React.FC = () => {
       prize: '₹4,00,000',
       status: 'upcoming',
       maxPlayers: 40,
-      registeredPlayers: 28
+      registeredPlayers: 28,
+      entryFee: '₹400'
     },
     {
       id: 'codm-tournament',
@@ -124,7 +145,19 @@ const Games: React.FC = () => {
       prize: '₹2,50,000',
       status: 'upcoming',
       maxPlayers: 64,
-      registeredPlayers: 41
+      registeredPlayers: 41,
+      entryFee: '₹250'
+    },
+    {
+      id: 'minecraft-build',
+      title: 'Minecraft Build Battle',
+      game: 'Minecraft',
+      date: '2025-03-10',
+      prize: '₹1,00,000',
+      status: 'upcoming',
+      maxPlayers: 32,
+      registeredPlayers: 15,
+      entryFee: '₹150'
     }
   ];
 
@@ -166,32 +199,50 @@ const Games: React.FC = () => {
 
   const gameCategories = ['all', ...Array.from(new Set(games.map(g => g.name)))];
 
+  const handleGameSelect = (gameId: string) => {
+    navigate(`/register/${gameId}`);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-dark-bg flex items-center justify-center pt-16">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-neon-blue"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-dark-bg text-white pt-16">
-      {/* Header */}
-      <section className="py-16 bg-dark-gradient">
-        <div className="container mx-auto px-4">
-          <div className="text-center">
-            <h1 className="text-5xl font-orbitron font-black mb-4 text-white">
-              Games & Tournaments
-            </h1>
-            <p className="text-xl text-light-gray max-w-2xl mx-auto">
-              Choose your battlefield and compete with the best players in India
-            </p>
+      {/* Hero Section */}
+      <section className="relative py-20 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
+        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="relative container mx-auto px-4 text-center">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
+            Choose Your <span className="text-blue-400">Battlefield</span>
+          </h1>
+          <p className="text-xl text-gray-200 max-w-3xl mx-auto mb-8">
+            Compete in India's most popular games and win amazing prizes. 
+            Join thousands of players in epic tournaments.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-3">
+              <span className="text-2xl font-bold text-blue-400">50+</span>
+              <p className="text-sm text-gray-300">Active Tournaments</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-3">
+              <span className="text-2xl font-bold text-green-400">₹50L+</span>
+              <p className="text-sm text-gray-300">Total Prize Pool</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-3">
+              <span className="text-2xl font-bold text-purple-400">10K+</span>
+              <p className="text-sm text-gray-300">Active Players</p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Game Filter */}
-      <section className="py-8 bg-dark-gray">
+      <section className="py-8 bg-gray-800">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap gap-4 justify-center">
             {gameCategories.map((game) => (
@@ -200,8 +251,8 @@ const Games: React.FC = () => {
                 onClick={() => setSelectedGame(game)}
                 className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
                   selectedGame === game
-                    ? 'bg-neon-blue text-white'
-                    : 'bg-transparent border border-gray-600 text-gray-300 hover:border-neon-blue hover:text-neon-blue'
+                    ? 'bg-blue-600 text-white shadow-lg'
+                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white'
                 }`}
               >
                 {game === 'all' ? 'All Games' : game}
@@ -214,14 +265,14 @@ const Games: React.FC = () => {
       {/* Games Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-orbitron font-bold text-center mb-12 text-white">
+          <h2 className="text-4xl font-bold text-center mb-12 text-white">
             Available Games
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {games.map((game) => (
               <div
                 key={game.id}
-                className="game-card rounded-lg overflow-hidden hover:transform hover:scale-105 transition-all duration-300"
+                className="bg-gray-800 rounded-xl overflow-hidden hover:transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl"
               >
                 <div className="relative h-48">
                   <img 
@@ -231,22 +282,45 @@ const Games: React.FC = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                   <div className="absolute top-4 right-4">
-                    <span className="bg-neon-blue text-white px-3 py-1 rounded-full text-sm font-medium">
+                    <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                       {game.category}
                     </span>
                   </div>
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <h3 className="text-2xl font-bold text-white mb-2">
+                      {game.name}
+                    </h3>
+                  </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-orbitron font-bold text-white mb-2">
-                    {game.name}
-                  </h3>
-                  <p className="text-light-gray mb-4">{game.description}</p>
-                  <button 
-                    onClick={() => setSelectedGame(game.name)}
-                    className="text-neon-blue hover:text-white transition-colors duration-300 font-medium"
-                  >
-                    View Tournaments →
-                  </button>
+                  <p className="text-gray-300 mb-4 line-clamp-2">{game.description}</p>
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center space-x-4 text-sm text-gray-400">
+                      <span className="flex items-center">
+                        <Users className="w-4 h-4 mr-1" />
+                        {game.players}
+                      </span>
+                      <span className="flex items-center">
+                        <Trophy className="w-4 h-4 mr-1" />
+                        {game.tournaments}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex space-x-3">
+                    <button 
+                      onClick={() => setSelectedGame(game.name)}
+                      className="flex-1 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors duration-300 text-sm"
+                    >
+                      View Tournaments
+                    </button>
+                    <button 
+                      onClick={() => handleGameSelect(game.id)}
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-300 text-sm flex items-center justify-center space-x-1"
+                    >
+                      <Play className="w-4 h-4" />
+                      <span>Join Now</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -254,77 +328,99 @@ const Games: React.FC = () => {
         </div>
       </section>
 
-      {/* Tournaments */}
-      <section className="py-16 bg-dark-gray">
+      {/* Tournaments Section */}
+      <section className="py-16 bg-gray-900">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-orbitron font-bold text-center mb-12 text-white">
-            {selectedGame === 'all' ? 'All Tournaments' : `${selectedGame} Tournaments`}
-          </h2>
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-white mb-4">
+              {selectedGame === 'all' ? 'All Tournaments' : `${selectedGame} Tournaments`}
+            </h2>
+            <p className="text-gray-400 text-lg">
+              Join these exciting tournaments and compete for amazing prizes
+            </p>
+          </div>
 
           {filteredTournaments.length > 0 ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
               {filteredTournaments.map((tournament) => (
                 <div
                   key={tournament.id}
-                  className="game-card rounded-lg p-6 hover:transform hover:scale-105 transition-all duration-300"
+                  className="bg-gray-800 rounded-xl p-6 hover:transform hover:scale-105 transition-all duration-300 shadow-xl"
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="text-xl font-orbitron font-bold text-white mb-2">
+                      <h3 className="text-xl font-bold text-white mb-2">
                         {tournament.title}
                       </h3>
-                      <p className="text-light-gray">{tournament.game}</p>
+                      <p className="text-blue-400 font-medium">{tournament.game}</p>
                     </div>
                     <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                       tournament.status === 'upcoming' 
-                        ? 'bg-neon-blue text-white'
+                        ? 'bg-green-600 text-white'
                         : tournament.status === 'live'
-                        ? 'bg-green-500 text-white'
-                        : 'bg-gray-500 text-white'
+                        ? 'bg-red-600 text-white'
+                        : 'bg-gray-600 text-white'
                     }`}>
                       {tournament.status.toUpperCase()}
                     </span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="flex items-center space-x-2">
-                      <Trophy className="w-4 h-4 text-neon-blue" />
-                      <span className="text-sm text-light-gray">Prize Pool</span>
-                    </div>
-                    <div className="text-right">
-                      <span className="font-bold text-neon-blue">{tournament.prize}</span>
+                    <div className="bg-gray-700 rounded-lg p-3">
+                      <div className="flex items-center space-x-2 mb-1">
+                        <Trophy className="w-4 h-4 text-yellow-400" />
+                        <span className="text-sm text-gray-300">Prize Pool</span>
+                      </div>
+                      <span className="font-bold text-yellow-400 text-lg">{tournament.prize}</span>
                     </div>
 
-                    <div className="flex items-center space-x-2">
-                      <Calendar className="w-4 h-4 text-neon-blue" />
-                      <span className="text-sm text-light-gray">Date</span>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-white text-sm">
-                        {new Date(tournament.date).toLocaleDateString()}
+                    <div className="bg-gray-700 rounded-lg p-3">
+                      <div className="flex items-center space-x-2 mb-1">
+                        <Calendar className="w-4 h-4 text-blue-400" />
+                        <span className="text-sm text-gray-300">Date</span>
+                      </div>
+                      <span className="text-white font-medium">
+                        {new Date(tournament.date).toLocaleDateString('en-IN')}
                       </span>
                     </div>
 
-                    <div className="flex items-center space-x-2">
-                      <Users className="w-4 h-4 text-neon-blue" />
-                      <span className="text-sm text-light-gray">Players</span>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-white text-sm">
-                        {tournament.registeredPlayers || 0}/{tournament.maxPlayers}
+                    <div className="bg-gray-700 rounded-lg p-3">
+                      <div className="flex items-center space-x-2 mb-1">
+                        <Users className="w-4 h-4 text-green-400" />
+                        <span className="text-sm text-gray-300">Players</span>
+                      </div>
+                      <span className="text-white font-medium">
+                        {tournament.registeredPlayers}/{tournament.maxPlayers}
                       </span>
+                    </div>
+
+                    <div className="bg-gray-700 rounded-lg p-3">
+                      <div className="flex items-center space-x-2 mb-1">
+                        <Star className="w-4 h-4 text-purple-400" />
+                        <span className="text-sm text-gray-300">Entry Fee</span>
+                      </div>
+                      <span className="text-purple-400 font-bold">{tournament.entryFee}</span>
                     </div>
                   </div>
 
-                  <button className="w-full btn-neon">
-                    Register Now
-                  </button>
+                  <div className="flex space-x-3">
+                    <Link 
+                      to={`/register/${tournament.game.toLowerCase().replace(' ', '')}`}
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors duration-300 text-center font-medium flex items-center justify-center space-x-2"
+                    >
+                      <span>Register Now</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                    <button className="px-6 py-3 border border-gray-600 text-gray-300 hover:text-white hover:border-gray-500 rounded-lg transition-colors duration-300">
+                      View Details
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="text-center text-light-gray">
-              <Trophy className="w-16 h-16 mx-auto mb-4 text-neon-blue/50" />
+            <div className="text-center text-gray-400 py-12">
+              <Trophy className="w-16 h-16 mx-auto mb-4 text-gray-600" />
               <p className="text-lg">No tournaments available for {selectedGame === 'all' ? 'any games' : selectedGame}</p>
               <p className="text-sm">Check back soon for new tournaments!</p>
             </div>

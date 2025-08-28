@@ -20,6 +20,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/games" element={<Games />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/register/:gameId" element={<Register />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           
