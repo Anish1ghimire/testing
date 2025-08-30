@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../config/firebase';
-import { Trophy, Users, Calendar, Clock, Star, Play, ArrowRight } from 'lucide-react';
+import { Trophy, Users, Calendar, Star, Play, ArrowRight } from 'lucide-react';
 import GameCard from '../components/GameCard';
 
 interface Game {
@@ -29,14 +27,11 @@ interface Tournament {
 }
 
 const Games: React.FC = () => {
-  const [games, setGames] = useState<Game[]>([]);
-  const [tournaments, setTournaments] = useState<Tournament[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedGame, setSelectedGame] = useState<string>('all');
   const navigate = useNavigate();
 
-  // Enhanced games data with more details
-  const defaultGames = [
+  // Static games data - no loading needed
+  const games: Game[] = [
     {
       id: 'bgmi',
       name: 'BGMI',
@@ -99,8 +94,8 @@ const Games: React.FC = () => {
     }
   ];
 
-  // Enhanced tournaments data
-  const defaultTournaments = [
+  // Static tournaments data - no loading needed
+  const tournaments: Tournament[] = [
     {
       id: 'bgmi-championship',
       title: 'BGMI Championship 2025',
@@ -111,6 +106,17 @@ const Games: React.FC = () => {
       maxPlayers: 100,
       registeredPlayers: 67,
       entryFee: '₹500'
+    },
+    {
+      id: 'bgmi-weekly',
+      title: 'BGMI Weekly Challenge',
+      game: 'BGMI',
+      date: '2025-02-08',
+      prize: '₹50,000',
+      status: 'upcoming',
+      maxPlayers: 64,
+      registeredPlayers: 32,
+      entryFee: '₹100'
     },
     {
       id: 'pubg-pro-league',
@@ -124,6 +130,17 @@ const Games: React.FC = () => {
       entryFee: '₹300'
     },
     {
+      id: 'pubg-squad-battle',
+      title: 'PUBG Squad Battle',
+      game: 'PUBG Mobile',
+      date: '2025-02-12',
+      prize: '₹1,00,000',
+      status: 'upcoming',
+      maxPlayers: 48,
+      registeredPlayers: 28,
+      entryFee: '₹200'
+    },
+    {
       id: 'freefire-masters',
       title: 'Free Fire Masters',
       game: 'Free Fire',
@@ -133,6 +150,17 @@ const Games: React.FC = () => {
       maxPlayers: 60,
       registeredPlayers: 38,
       entryFee: '₹200'
+    },
+    {
+      id: 'freefire-clash',
+      title: 'Free Fire Clash Royale',
+      game: 'Free Fire',
+      date: '2025-02-18',
+      prize: '₹75,000',
+      status: 'upcoming',
+      maxPlayers: 40,
+      registeredPlayers: 22,
+      entryFee: '₹150'
     },
     {
       id: 'valorant-invitational',
@@ -155,51 +183,8 @@ const Games: React.FC = () => {
       maxPlayers: 64,
       registeredPlayers: 41,
       entryFee: '₹250'
-    },
-    {
-      id: 'minecraft-build',
-      title: 'Minecraft Build Battle',
-      game: 'Minecraft',
-      date: '2025-03-10',
-      prize: '₹1,00,000',
-      status: 'upcoming',
-      maxPlayers: 32,
-      registeredPlayers: 15,
-      entryFee: '₹150'
     }
   ];
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Try to fetch from Firebase, fallback to default data
-        const gamesSnapshot = await getDocs(collection(db, 'games'));
-        const gamesData = gamesSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        })) as Game[];
-
-        const tournamentsSnapshot = await getDocs(collection(db, 'tournaments'));
-        const tournamentsData = tournamentsSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        })) as Tournament[];
-
-        // Use Firebase data if available, otherwise use default data
-        setGames(gamesData.length > 0 ? gamesData : defaultGames);
-        setTournaments(tournamentsData.length > 0 ? tournamentsData : defaultTournaments);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        // Use default data on error
-        setGames(defaultGames);
-        setTournaments(defaultTournaments);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const filteredTournaments = selectedGame === 'all' 
     ? tournaments 
@@ -211,46 +196,68 @@ const Games: React.FC = () => {
     navigate(`/register/${gameId}`);
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-dark-bg flex items-center justify-center pt-16">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
+  const handleViewTournaments = (gameName: string) => {
+    setSelectedGame(gameName);
+    // Scroll to tournaments section
+    setTimeout(() => {
+      const tournamentsSection = document.getElementById('tournaments-section');
+      if (tournamentsSection) {
+        tournamentsSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
 
   return (
-    <div className="min-h-screen bg-dark-bg text-white pt-16">
+    <div className="min-h-screen bg-gray-900 text-white pt-16">
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative container mx-auto px-4 text-center">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
-            Choose Your <span className="text-blue-400">Battlefield</span>
+            Choose Your <span className="text-blue-400">Game</span>
           </h1>
           <p className="text-xl text-gray-200 max-w-3xl mx-auto mb-8">
             Compete in India's most popular games and win amazing prizes. 
             Join thousands of players in epic tournaments.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-3">
-              <span className="text-2xl font-bold text-blue-400">50+</span>
+          <div className="flex flex-wrap justify-center gap-6">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-4">
+              <span className="text-3xl font-bold text-blue-400">50+</span>
               <p className="text-sm text-gray-300">Active Tournaments</p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-3">
-              <span className="text-2xl font-bold text-green-400">₹50L+</span>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-4">
+              <span className="text-3xl font-bold text-green-400">₹50L+</span>
               <p className="text-sm text-gray-300">Total Prize Pool</p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-3">
-              <span className="text-2xl font-bold text-purple-400">10K+</span>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-4">
+              <span className="text-3xl font-bold text-purple-400">10K+</span>
               <p className="text-sm text-gray-300">Active Players</p>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Games Grid */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-12 text-white">
+            Available Games
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            {games.map((game) => (
+              <GameCard
+                key={game.id}
+                game={game}
+                onGameSelect={handleGameSelect}
+                onViewTournaments={handleViewTournaments}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Game Filter */}
-      <section className="py-8 bg-gray-800">
+      <section className="py-8 bg-gray-800" id="tournaments-section">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap gap-4 justify-center">
             {gameCategories.map((game) => (
@@ -270,27 +277,8 @@ const Games: React.FC = () => {
         </div>
       </section>
 
-      {/* Games Grid */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12 text-white">
-            Available Games
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {games.map((game) => (
-              <GameCard
-                key={game.id}
-                game={game}
-                onGameSelect={handleGameSelect}
-                onViewTournaments={setSelectedGame}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Tournaments Section */}
-      <section className="py-16 bg-gray-900">
+      <section className="py-16 bg-gray-800">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-4">
@@ -306,7 +294,7 @@ const Games: React.FC = () => {
               {filteredTournaments.map((tournament) => (
                 <div
                   key={tournament.id}
-                  className="bg-gray-800 rounded-xl p-6 hover:transform hover:scale-105 transition-all duration-300 shadow-xl"
+                  className="bg-gray-700 rounded-xl p-6 hover:transform hover:scale-105 transition-all duration-300 shadow-xl border border-gray-600"
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div>
@@ -327,7 +315,7 @@ const Games: React.FC = () => {
                   </div>
 
                   <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="bg-gray-700 rounded-lg p-3">
+                    <div className="bg-gray-600 rounded-lg p-3">
                       <div className="flex items-center space-x-2 mb-1">
                         <Trophy className="w-4 h-4 text-yellow-400" />
                         <span className="text-sm text-gray-300">Prize Pool</span>
@@ -335,7 +323,7 @@ const Games: React.FC = () => {
                       <span className="font-bold text-yellow-400 text-lg">{tournament.prize}</span>
                     </div>
 
-                    <div className="bg-gray-700 rounded-lg p-3">
+                    <div className="bg-gray-600 rounded-lg p-3">
                       <div className="flex items-center space-x-2 mb-1">
                         <Calendar className="w-4 h-4 text-blue-400" />
                         <span className="text-sm text-gray-300">Date</span>
@@ -345,7 +333,7 @@ const Games: React.FC = () => {
                       </span>
                     </div>
 
-                    <div className="bg-gray-700 rounded-lg p-3">
+                    <div className="bg-gray-600 rounded-lg p-3">
                       <div className="flex items-center space-x-2 mb-1">
                         <Users className="w-4 h-4 text-green-400" />
                         <span className="text-sm text-gray-300">Players</span>
@@ -355,7 +343,7 @@ const Games: React.FC = () => {
                       </span>
                     </div>
 
-                    <div className="bg-gray-700 rounded-lg p-3">
+                    <div className="bg-gray-600 rounded-lg p-3">
                       <div className="flex items-center space-x-2 mb-1">
                         <Star className="w-4 h-4 text-purple-400" />
                         <span className="text-sm text-gray-300">Entry Fee</span>
@@ -366,13 +354,13 @@ const Games: React.FC = () => {
 
                   <div className="flex space-x-3">
                     <Link 
-                      to={`/register/${tournament.game.toLowerCase().replace(' ', '')}`}
+                      to={`/register/${tournament.game.toLowerCase().replace(/\s+/g, '')}`}
                       className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors duration-300 text-center font-medium flex items-center justify-center space-x-2"
                     >
                       <span>Register Now</span>
                       <ArrowRight className="w-4 h-4" />
                     </Link>
-                    <button className="px-6 py-3 border border-gray-600 text-gray-300 hover:text-white hover:border-gray-500 rounded-lg transition-colors duration-300">
+                    <button className="px-6 py-3 border border-gray-500 text-gray-300 hover:text-white hover:border-gray-400 rounded-lg transition-colors duration-300">
                       View Details
                     </button>
                   </div>
@@ -386,6 +374,26 @@ const Games: React.FC = () => {
               <p className="text-sm">Check back soon for new tournaments!</p>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-16 bg-gradient-to-r from-blue-900 to-purple-900">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">
+            Ready to Compete?
+          </h2>
+          <p className="text-gray-200 mb-8 max-w-2xl mx-auto">
+            Join thousands of players in India's premier esports tournaments. 
+            Register now and start your journey to becoming a champion.
+          </p>
+          <Link 
+            to="/register" 
+            className="inline-flex items-center space-x-2 bg-white text-gray-900 px-8 py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors duration-300"
+          >
+            <Play className="w-5 h-5" />
+            <span>Start Registration</span>
+          </Link>
         </div>
       </section>
     </div>
