@@ -47,24 +47,28 @@ const Home: React.FC = () => {
     {
       name: 'BGMI',
       image: 'https://images.pexels.com/photos/7915437/pexels-photo-7915437.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      logo: 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
       players: '2.5M+',
       tournaments: '15 Active'
     },
     {
       name: 'PUBG Mobile',
       image: 'https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      logo: 'https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
       players: '3.2M+',
       tournaments: '12 Active'
     },
     {
       name: 'Free Fire',
       image: 'https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      logo: 'https://images.pexels.com/photos/1029604/pexels-photo-1029604.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
       players: '1.8M+',
       tournaments: '8 Active'
     },
     {
       name: 'Valorant',
       image: 'https://images.pexels.com/photos/3945313/pexels-photo-3945313.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      logo: 'https://images.pexels.com/photos/3945313/pexels-photo-3945313.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
       players: '1.2M+',
       tournaments: '6 Active'
     }
@@ -191,6 +195,13 @@ const Home: React.FC = () => {
                       <span>{game.players} Players</span>
                       <span>{game.tournaments}</span>
                     </div>
+                  </div>
+                  <div className="absolute top-4 left-4">
+                    <img 
+                      src={game.logo} 
+                      alt={`${game.name} logo`}
+                      className="w-10 h-10 rounded-lg border-2 border-white/20 bg-white/10 backdrop-blur-sm object-cover"
+                    />
                   </div>
                 </div>
               </div>

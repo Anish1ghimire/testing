@@ -3,12 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { Trophy, Users, Calendar, Clock, Star, Play, ArrowRight } from 'lucide-react';
+import GameCard from '../components/GameCard';
 
 interface Game {
   id: string;
   name: string;
   description: string;
   image: string;
+  logo: string;
   category: string;
   players: string;
   tournaments: string;
@@ -40,6 +42,7 @@ const Games: React.FC = () => {
       name: 'BGMI',
       description: 'Battlegrounds Mobile India - The ultimate battle royale experience with 100 players fighting for survival',
       image: 'https://images.pexels.com/photos/7915437/pexels-photo-7915437.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
+      logo: 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
       category: 'Battle Royale',
       players: '2.5M+',
       tournaments: '15 Active'
@@ -49,6 +52,7 @@ const Games: React.FC = () => {
       name: 'PUBG Mobile',
       description: 'PlayerUnknown\'s Battlegrounds - Survive and be the last one standing in this intense battle royale',
       image: 'https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
+      logo: 'https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
       category: 'Battle Royale',
       players: '3.2M+',
       tournaments: '12 Active'
@@ -58,6 +62,7 @@ const Games: React.FC = () => {
       name: 'Free Fire',
       description: 'Fast-paced 10-minute battle royale game with unique characters and special abilities',
       image: 'https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
+      logo: 'https://images.pexels.com/photos/1029604/pexels-photo-1029604.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
       category: 'Battle Royale',
       players: '1.8M+',
       tournaments: '8 Active'
@@ -67,6 +72,7 @@ const Games: React.FC = () => {
       name: 'Valorant',
       description: 'Tactical 5v5 first-person shooter with unique agent abilities and strategic gameplay',
       image: 'https://images.pexels.com/photos/3945313/pexels-photo-3945313.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
+      logo: 'https://images.pexels.com/photos/3945313/pexels-photo-3945313.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
       category: 'FPS',
       players: '1.2M+',
       tournaments: '6 Active'
@@ -76,6 +82,7 @@ const Games: React.FC = () => {
       name: 'Call of Duty Mobile',
       description: 'Action-packed mobile FPS with multiple game modes including Battle Royale and Multiplayer',
       image: 'https://images.pexels.com/photos/3945313/pexels-photo-3945313.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
+      logo: 'https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
       category: 'FPS',
       players: '900K+',
       tournaments: '5 Active'
@@ -85,6 +92,7 @@ const Games: React.FC = () => {
       name: 'Minecraft',
       description: 'Creative building and survival game with endless possibilities and competitive building contests',
       image: 'https://images.pexels.com/photos/1029604/pexels-photo-1029604.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
+      logo: 'https://images.pexels.com/photos/1029604/pexels-photo-1029604.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
       category: 'Sandbox',
       players: '500K+',
       tournaments: '3 Active'
@@ -270,59 +278,12 @@ const Games: React.FC = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {games.map((game) => (
-              <div
+              <GameCard
                 key={game.id}
-                className="bg-gray-800 rounded-xl overflow-hidden hover:transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl"
-              >
-                <div className="relative h-48">
-                  <img 
-                    src={game.image} 
-                    alt={game.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                  <div className="absolute top-4 right-4">
-                    <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                      {game.category}
-                    </span>
-                  </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="text-2xl font-bold text-white mb-2">
-                      {game.name}
-                    </h3>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <p className="text-gray-300 mb-4 line-clamp-2">{game.description}</p>
-                  <div className="flex justify-between items-center mb-4">
-                    <div className="flex items-center space-x-4 text-sm text-gray-400">
-                      <span className="flex items-center">
-                        <Users className="w-4 h-4 mr-1" />
-                        {game.players}
-                      </span>
-                      <span className="flex items-center">
-                        <Trophy className="w-4 h-4 mr-1" />
-                        {game.tournaments}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex space-x-3">
-                    <button 
-                      onClick={() => setSelectedGame(game.name)}
-                      className="flex-1 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors duration-300 text-sm"
-                    >
-                      View Tournaments
-                    </button>
-                    <button 
-                      onClick={() => handleGameSelect(game.id)}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-300 text-sm flex items-center justify-center space-x-1"
-                    >
-                      <Play className="w-4 h-4" />
-                      <span>Join Now</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+                game={game}
+                onGameSelect={handleGameSelect}
+                onViewTournaments={setSelectedGame}
+              />
             ))}
           </div>
         </div>

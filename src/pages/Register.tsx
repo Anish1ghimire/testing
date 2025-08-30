@@ -48,27 +48,32 @@ const Register: React.FC = () => {
     {
       id: 'bgmi',
       name: 'BGMI',
-      image: 'https://images.pexels.com/photos/7915437/pexels-photo-7915437.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop'
+      image: 'https://images.pexels.com/photos/7915437/pexels-photo-7915437.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      logo: 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop'
     },
     {
       id: 'pubg',
       name: 'PUBG Mobile',
-      image: 'https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop'
+      image: 'https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      logo: 'https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop'
     },
     {
       id: 'freefire',
       name: 'Free Fire',
-      image: 'https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop'
+      image: 'https://images.pexels.com/photos/442576/pexels-photo-442576.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      logo: 'https://images.pexels.com/photos/1029604/pexels-photo-1029604.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop'
     },
     {
       id: 'valorant',
       name: 'Valorant',
-      image: 'https://images.pexels.com/photos/3945313/pexels-photo-3945313.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop'
+      image: 'https://images.pexels.com/photos/3945313/pexels-photo-3945313.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      logo: 'https://images.pexels.com/photos/3945313/pexels-photo-3945313.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop'
     },
     {
       id: 'callofduty',
       name: 'Call of Duty Mobile',
-      image: 'https://images.pexels.com/photos/3945313/pexels-photo-3945313.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop'
+      image: 'https://images.pexels.com/photos/3945313/pexels-photo-3945313.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      logo: 'https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop'
     }
   ];
 
@@ -446,14 +451,22 @@ const Register: React.FC = () => {
               {/* Selected Game Info */}
               {selectedGame && (
                 <div className="bg-gray-800 rounded-xl p-6 h-fit">
-                  <h3 className="text-xl font-bold mb-4">Selected Game</h3>
+                  <h3 className="text-xl font-bold mb-4 text-center">Selected Game</h3>
                   <div className="text-center">
+                    <div className="relative inline-block mb-4">
+                      <img 
+                        src={selectedGame.logo} 
+                        alt={`${selectedGame.name} logo`}
+                        className="w-16 h-16 rounded-xl object-cover mx-auto border-2 border-blue-500/30"
+                      />
+                    </div>
                     <img 
                       src={selectedGame.image} 
                       alt={selectedGame.name}
-                      className="w-full h-32 object-cover rounded-lg mb-4"
+                      className="w-full h-32 object-cover rounded-lg mb-3"
                     />
                     <h4 className="text-lg font-bold text-blue-400">{selectedGame.name}</h4>
+                    <p className="text-sm text-gray-400 mt-2">Ready to compete?</p>
                   </div>
                 </div>
               )}
